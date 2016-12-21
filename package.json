@@ -49,5 +49,6 @@
     "lint",
     "validate",
     "test"
-  ]
+  ],
+  "dependencies": {}
 }

@@ -1,14 +1,14 @@
 // ==ClosureCompiler==
 // @compilation_level SIMPLE_OPTIMIZATIONS
-// @output_file_name mixpanel-jslib-2.2-snippet.min.js
+// @output_file_name fap-jslib-2.2-snippet.min.js
 // ==/ClosureCompiler==
 
 /** @define {string} */
-var MIXPANEL_LIB_URL = '//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
+var FAP_LIB_URL = 'fap.min.js';
 
-(function(document, mixpanel){
+(function(document, fap){
     // Only stub out if this is the first time running the snippet.
-    if (!mixpanel['__SV']) {
+    if (!fap['__SV']) {
         var win = window;
 
         // grab the hash params for ce editor immediately in case
@@ -28,16 +28,16 @@ var MIXPANEL_LIB_URL = '//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
           }
         } catch (e) {}
 
-        var script, first_script, gen_fn, functions, i, lib_name = "mixpanel";
-        window[lib_name] = mixpanel;
+        var script, first_script, gen_fn, functions, i, lib_name = "fap";
+        window[lib_name] = fap;
 
-        mixpanel['_i'] = [];
+        fap['_i'] = [];
 
-        mixpanel['init'] = function (token, config, name) {
-            // support multiple mixpanel instances
-            var target = mixpanel;
+        fap['init'] = function (token, config, name) {
+            // support multiple fap instances
+            var target = fap;
             if (typeof(name) !== 'undefined') {
-                target = mixpanel[name] = [];
+                target = fap[name] = [];
             } else {
                 name = lib_name;
             }
@@ -70,34 +70,35 @@ var MIXPANEL_LIB_URL = '//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
                 };
             }
 
-            // create shallow clone of the public mixpanel interface
-            // Note: only supports 1 additional level atm, e.g. mixpanel.people.set, not mixpanel.people.set.do_something_else.
+            // create shallow clone of the public fap interface
+            // Note: only supports 1 additional level atm, e.g. fap.people.set, not fap.people.set.do_something_else.
             functions = "disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(' ');
             for (i = 0; i < functions.length; i++) {
                 _set_and_defer(target, functions[i]);
             }
 
-            // register mixpanel instance
-            mixpanel['_i'].push([token, config, name]);
+            // register fap instance
+            fap['_i'].push([token, config, name]);
         };
 
         // Snippet version, used to fail on new features w/ old snippet
-        mixpanel['__SV'] = 1.2;
+        fap['__SV'] = 1.2;
 
         script = document.createElement("script");
         script.type = "text/javascript";
         script.async = true;
+        script.src = FAP_LIB_URL;
 
-        if (typeof MIXPANEL_CUSTOM_LIB_URL !== 'undefined') {
-            script.src = MIXPANEL_CUSTOM_LIB_URL;
-        } else if (document.location.protocol === 'file:' && MIXPANEL_LIB_URL.match(/^\/\//)) {
-            script.src = 'https:' + MIXPANEL_LIB_URL;
-        } else {
-            script.src = MIXPANEL_LIB_URL;
-        }
+        //if (typeof fap_CUSTOM_LIB_URL !== 'undefined') {
+        //    script.src = fap_CUSTOM_LIB_URL;
+        //} else if (document.location.protocol === 'file:' && FAP_LIB_URL.match(/^\/\//)) {
+        //    script.src = 'https:' + FAP_LIB_URL;
+        //} else {
+        //    script.src = FAP_LIB_URL;
+        //}
 
         first_script = document.getElementsByTagName("script")[0];
         first_script.parentNode.insertBefore(script, first_script);
     }
-// Pass in current Mixpanel object if it exists (for ppl like Optimizely)
-})(document, window['mixpanel'] || []);
+// Pass in current fap object if it exists (for ppl like Optimizely)
+})(document, window['fap'] || []);

@@ -59,7 +59,7 @@ var console = {
     /** @type {function(...[*])} */
     error: function() {
         if (Config.DEBUG && !_.isUndefined(windowConsole) && windowConsole) {
-            var args = ['Mixpanel error:'].concat(_.toArray(arguments));
+            var args = ['FAP error:'].concat(_.toArray(arguments));
             try {
                 windowConsole.error.apply(windowConsole, args);
             } catch (err) {
@@ -72,7 +72,7 @@ var console = {
     /** @type {function(...[*])} */
     critical: function() {
         if (!_.isUndefined(windowConsole) && windowConsole) {
-            var args = ['Mixpanel error:'].concat(_.toArray(arguments));
+            var args = ['FAP error:'].concat(_.toArray(arguments));
             try {
                 windowConsole.error.apply(windowConsole, args);
             } catch (err) {
@@ -323,7 +323,7 @@ _.safewrap = function(f) {
         try {
             return f.apply(this, arguments);
         } catch (e) {
-            console.critical('Implementation error. Please contact support@mixpanel.com.');
+            console.critical('Implementation error. Please contact fap@rever.com.');
         }
     };
 };

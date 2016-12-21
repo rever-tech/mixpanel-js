@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Mixpanel JavaScript loader examples</title>
+    <script src="fap-loader.min.js"></script>
+    <script type="text/javascript">
+        fap.init("");
+        fap.identify("123456");
+        fap.people.set({
+            name:"John Oman",
+            gender: "male"
+        });
+
+        fap.alias("123456", "654321");
+
+        fap.register({
+            tui:"ai-do",
+            ai:"ok"
+        });
+    </script>
+</head>
+<body>
+    <button id="my_button" type="button" value="Reset" onclick="console.log('my_button click!')">Reset</button>
+</body>
+</html>
+
+

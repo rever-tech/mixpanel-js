@@ -372,6 +372,7 @@ var autotrack = {
 
     _customProperties: {},
     init: function(instance) {
+        console.log('Init autotrack!');
         if (!(document && document.body)) {
             console.log('document not ready yet, trying again in 500 milliseconds...');
             var that = this;
@@ -388,8 +389,8 @@ var autotrack = {
 
         if (!this._maybeLoadEditor(instance)) { // don't autotrack actions when the editor is enabled
             var parseDecideResponse = _.bind(function(response) {
-                if (response && response['config'] && response['config']['enable_collect_everything'] === true) {
-
+                //if (response && response['config'] && response['config']['enable_collect_everything'] === true) {
+                if (true) {
                     if (response['custom_properties']) {
                         this._customProperties = response['custom_properties'];
                     }

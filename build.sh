@@ -12,10 +12,10 @@ if [ -z "$1" ]; then
 else
     COMPILER=$1
 fi
-java -jar $COMPILER --js mixpanel.js --js_output_file mixpanel.min.js --compilation_level ADVANCED_OPTIMIZATIONS --output_wrapper "(function() {
+java -jar $COMPILER --js mixpanel.js --js_output_file ./examples/rv/fap.min.js --compilation_level ADVANCED_OPTIMIZATIONS --output_wrapper "(function() {
 %output%
 })();"
-java -jar $COMPILER --js mixpanel-jslib-snippet.js --js_output_file mixpanel-jslib-snippet.min.js --compilation_level ADVANCED_OPTIMIZATIONS
+java -jar $COMPILER --js mixpanel-jslib-snippet.js --js_output_file ./examples/rv/fap-loader.min.js --compilation_level ADVANCED_OPTIMIZATIONS
 java -jar $COMPILER --js mixpanel-jslib-snippet.js --js_output_file mixpanel-jslib-snippet.min.test.js --compilation_level ADVANCED_OPTIMIZATIONS --define='MIXPANEL_LIB_URL="../mixpanel.min.js"'
 
 echo 'Bundling module-loader test runners'

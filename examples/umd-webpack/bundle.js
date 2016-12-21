@@ -128,7 +128,7 @@
 	        /** @type {function(...[*])} */
 	        error: function() {
 	            if (Config.DEBUG && !_.isUndefined(windowConsole) && windowConsole) {
-	                var args = ['Mixpanel error:'].concat(_.toArray(arguments));
+	                var args = ['FAP error:'].concat(_.toArray(arguments));
 	                try {
 	                    windowConsole.error.apply(windowConsole, args);
 	                } catch (err) {
@@ -141,7 +141,7 @@
 	        /** @type {function(...[*])} */
 	        critical: function() {
 	            if (!_.isUndefined(windowConsole) && windowConsole) {
-	                var args = ['Mixpanel error:'].concat(_.toArray(arguments));
+	                var args = ['FAP error:'].concat(_.toArray(arguments));
 	                try {
 	                    windowConsole.error.apply(windowConsole, args);
 	                } catch (err) {
@@ -392,7 +392,7 @@
 	            try {
 	                return f.apply(this, arguments);
 	            } catch (e) {
-	                console$1.critical('Implementation error. Please contact support@mixpanel.com.');
+	                console$1.critical('Implementation error. Please contact fap@rever.com.');
 	            }
 	        };
 	    };
@@ -1984,6 +1984,7 @@
 
 	        _customProperties: {},
 	        init: function(instance) {
+	            console.log('Init autotrack!');
 	            if (!(document && document.body)) {
 	                console.log('document not ready yet, trying again in 500 milliseconds...');
 	                var that = this;
@@ -2000,8 +2001,8 @@
 
 	            if (!this._maybeLoadEditor(instance)) { // don't autotrack actions when the editor is enabled
 	                var parseDecideResponse = _.bind(function(response) {
-	                    if (response && response['config'] && response['config']['enable_collect_everything'] === true) {
-
+	                    //if (response && response['config'] && response['config']['enable_collect_everything'] === true) {
+	                    if (true) {
 	                        if (response['custom_properties']) {
 	                            this._customProperties = response['custom_properties'];
 	                        }
@@ -2012,9 +2013,7 @@
 
 	                        this._addDomEventHandlers(instance);
 
-	                    } else {
-	                        instance['__autotrack_enabled'] = false;
-	                    }
+	                    } else {}
 	                }, this);
 
 	                instance._send_request(
@@ -2173,12 +2172,12 @@
 	    /*
 	     * Constants
 	     */
-	    /** @const */   var PRIMARY_INSTANCE_NAME     = 'mixpanel';
-	    /** @const */   var SET_QUEUE_KEY             = '__mps';
-	    /** @const */   var SET_ONCE_QUEUE_KEY        = '__mpso';
-	    /** @const */   var ADD_QUEUE_KEY             = '__mpa';
-	    /** @const */   var APPEND_QUEUE_KEY          = '__mpap';
-	    /** @const */   var UNION_QUEUE_KEY           = '__mpu';
+	    /** @const */   var PRIMARY_INSTANCE_NAME     = 'fap';
+	    /** @const */   var SET_QUEUE_KEY             = '__faps';
+	    /** @const */   var SET_ONCE_QUEUE_KEY        = '__fapso';
+	    /** @const */   var ADD_QUEUE_KEY             = '__fapa';
+	    /** @const */   var APPEND_QUEUE_KEY          = '__fapap';
+	    /** @const */   var UNION_QUEUE_KEY           = '__fapu';
 	    /** @const */   var SET_ACTION                = '$set';
 	    /** @const */   var SET_ONCE_ACTION           = '$set_once';
 	    /** @const */   var ADD_ACTION                = '$add';
@@ -2219,10 +2218,10 @@
 	     * Module-level globals
 	     */
 	    var DEFAULT_CONFIG = {
-	        'api_host':               HTTP_PROTOCOL + 'api.mixpanel.com',
-	        'app_host':               HTTP_PROTOCOL + 'mixpanel.com',
+	        'api_host':               HTTP_PROTOCOL + 'client.rever.vn',
+	        'app_host':               HTTP_PROTOCOL + 'client.rever.vn',
 	        'autotrack':              true,
-	        'cdn':                    HTTP_PROTOCOL + 'cdn.mxpnl.com',
+	        'cdn':                    HTTP_PROTOCOL + 'client.rever.vn',
 	        'cross_subdomain_cookie': true,
 	        'persistence':            'cookie',
 	        'persistence_name':       '',
@@ -2234,7 +2233,7 @@
 	        'verbose':                false,
 	        'img':                    false,
 	        'track_pageview':         true,
-	        'debug':                  false,
+	        'debug':                  true,
 	        'track_links_timeout':    300,
 	        'cookie_expiration':      365,
 	        'upgrade':                false,
@@ -2405,9 +2404,9 @@
 	        this.campaign_params_saved = false;
 
 	        if (config['persistence_name']) {
-	            this.name = 'mp_' + config['persistence_name'];
+	            this.name = 'f_' + config['persistence_name'];
 	        } else {
-	            this.name = 'mp_' + config['token'] + '_mixpanel';
+	            this.name = 'f_' + config['token'] + '_fap';
 	        }
 
 	        var storage_type = config['persistence'];
@@ -2473,7 +2472,7 @@
 	            old_cookie;
 
 	        if (upgrade_from_old_lib) {
-	            old_cookie_name = 'mp_super_properties';
+	            old_cookie_name = 'fap_super_properties';
 	            // Case where they had a custom cookie name before.
 	            if (typeof(upgrade_from_old_lib) === 'string') {
 	                old_cookie_name = upgrade_from_old_lib;
@@ -2496,8 +2495,8 @@
 
 	        if (!config['cookie_name'] && config['name'] !== 'mixpanel') {
 	            // special case to handle people with cookies of the form
-	            // mp_TOKEN_INSTANCENAME from the first release of this library
-	            old_cookie_name = 'mp_' + config['token'] + '_' + config['name'];
+	            // fap_TOKEN_INSTANCENAME from the first release of this library
+	            old_cookie_name = 'fap_' + config['token'] + '_' + config['name'];
 	            old_cookie = this.storage.parse(old_cookie_name);
 
 	            if (old_cookie) {
@@ -2738,7 +2737,7 @@
 	            append_q.push(q_data);
 	        }
 
-	        console$1.log('MIXPANEL PEOPLE REQUEST (QUEUED, PENDING IDENTIFY):');
+	        console$1.log('FAP PEOPLE REQUEST (QUEUED, PENDING IDENTIFY):');
 	        console$1.log(data);
 
 	        this.save();
@@ -2844,6 +2843,8 @@
 	        Config.DEBUG = Config.DEBUG || instance.get_config('debug');
 
 	        instance['__autotrack_enabled'] = instance.get_config('autotrack');
+	        console$1.log(instance.get_config('autotrack'));
+	        console$1.log(instance)
 	        if (instance.get_config('autotrack')) {
 	            var num_buckets = 100;
 	            var num_enabled_buckets = 100;
@@ -2855,6 +2856,7 @@
 	                console$1.log('Disabling Automatic Event Collection because this browser is not supported');
 	            } else {
 	                autotrack.init(instance);
+	                console$1.log('Enable autotrack!');
 	            }
 
 	            try {
@@ -2862,6 +2864,8 @@
 	            } catch (e) {
 	                console$1.error(e);
 	            }
+	        } else {
+	            console$1.log('autotrack disabled');
 	        }
 
 	        // if target is not defined, we called init after the lib already
@@ -2900,7 +2904,7 @@
 	            return;
 	        }
 	        if (name === PRIMARY_INSTANCE_NAME) {
-	            console$1.error('You must initialize the main mixpanel object right after you include the Mixpanel js snippet');
+	            console$1.error('You must initialize the main fap object right after you include the FAP js snippet');
 	            return;
 	        }
 
@@ -3051,12 +3055,12 @@
 	            try {
 	                var req = new XMLHttpRequest();
 	                req.open('GET', url, true);
-	                // send the mp_optout cookie
+	                // send the fap_optout cookie
 	                // withCredentials cannot be modified until after calling .open on Android and Mobile Safari
 	                req.withCredentials = true;
 	                req.onreadystatechange = function () {
 	                    if (req.readyState === 4) { // XMLHttpRequest.DONE == 4, except in safari 4
-	                        if (url.indexOf('api.mixpanel.com/track') !== -1) {
+	                        if (url.indexOf('api.fap.vn/track') !== -1) {
 	                            autotrack.checkForBackoff(req);
 	                        }
 	                        if (req.status === 200) {
@@ -3191,7 +3195,7 @@
 	        }
 
 	        if (_.isUndefined(event_name)) {
-	            console$1.error('No event name provided to mixpanel.track');
+	            console$1.error('No event name provided to fap.track');
 	            return;
 	        }
 
@@ -3230,12 +3234,12 @@
 	        );
 
 	        try {
-	            if (this.get_config('autotrack') && event_name !== 'mp_page_view' && event_name !== '$create_alias') {
+	            if (this.get_config('autotrack') && event_name !== 'fap_page_view' && event_name !== '$create_alias') {
 	                // The point of $__c is to count how many clicks occur per tracked event. Since we're
 	                // tracking an event in this function, we need to reset the $__c value.
-	                properties = _.extend({}, properties, this.mp_counts);
-	                this.mp_counts = {'$__c': 0};
-	                _.cookie.set('mp_' + this.get_config('name') + '__c', 0, 1, true);
+	                properties = _.extend({}, properties, this.fap_counts);
+	                this.fap_counts = {'$__c': 0};
+	                _.cookie.set('fap_' + this.get_config('name') + '__c', 0, 1, true);
 	            }
 	        } catch (e) {
 	            console$1.error(e);
@@ -3259,7 +3263,7 @@
 	        var json_data      = _.JSONEncode(truncated_data);
 	        var encoded_data   = _.base64Encode(json_data);
 
-	        console$1.log('MIXPANEL REQUEST:');
+	        console$1.log('FAP REQUEST:');
 	        console$1.log(truncated_data);
 
 	        this._send_request(
@@ -3283,7 +3287,7 @@
 	        if (_.isUndefined(page)) {
 	            page = document.location.href;
 	        }
-	        this.track('mp_page_view', _.info.pageviewInfo(page));
+	        this.track('fap_page_view', _.info.pageviewInfo(page));
 	    };
 
 	    /**
@@ -3368,7 +3372,7 @@
 	     */
 	    MixpanelLib.prototype.time_event = function(event_name) {
 	        if (_.isUndefined(event_name)) {
-	            console$1.error('No event name provided to mixpanel.time_event');
+	            console$1.error('No event name provided to fap.time_event');
 	            return;
 	        }
 
@@ -3572,7 +3576,7 @@
 	     * @api private
 	     */
 	    MixpanelLib.prototype.name_tag = function(name_tag) {
-	        this._register_single('mp_name_tag', name_tag);
+	        this._register_single('fap_name_tag', name_tag);
 	    };
 
 	    /**
@@ -3692,7 +3696,7 @@
 	            return;
 	        }
 
-	        console$1.log('MIXPANEL NOTIFICATION CHECK');
+	        console$1.log('FAP NOTIFICATION CHECK');
 
 	        var data = {
 	            'verbose':     true,
@@ -3843,7 +3847,7 @@
 	            _.each(prop, function(v, k) {
 	                if (!this._is_reserved_property(k)) {
 	                    if (isNaN(parseFloat(v))) {
-	                        console$1.error('Invalid increment value passed to mixpanel.people.increment - must be a number');
+	                        console$1.error('Invalid increment value passed to fap.people.increment - must be a number');
 	                        return;
 	                    } else {
 	                        $add[k] = v;
@@ -3968,7 +3972,7 @@
 	        if (!_.isNumber(amount)) {
 	            amount = parseFloat(amount);
 	            if (isNaN(amount)) {
-	                console$1.error('Invalid value passed to mixpanel.people.track_charge - must be a number');
+	                console$1.error('Invalid value passed to fap.people.track_charge - must be a number');
 	                return;
 	            }
 	        }
@@ -4004,7 +4008,7 @@
 	     */
 	    MixpanelPeople.prototype.delete_user = function() {
 	        if (!this._identify_called()) {
-	            console$1.error('mixpanel.people.delete_user() requires you to call identify() first');
+	            console$1.error('fap.people.delete_user() requires you to call identify() first');
 	            return;
 	        }
 	        var data = {'$delete': this._mixpanel.get_distinct_id()};
@@ -4036,7 +4040,7 @@
 	            return truncated_data;
 	        }
 
-	        console$1.log('MIXPANEL PEOPLE REQUEST:');
+	        console$1.log('FAP PEOPLE REQUEST:');
 	        console$1.log(truncated_data);
 
 	        this._mixpanel._send_request(
@@ -4497,7 +4501,7 @@
 	                                '<div id="title">' + this.title + '</div>' +
 	                                '<div id="body">' + this.body + '</div>' +
 	                                '<div id="tagline">' +
-	                                    '<a href="http://mixpanel.com?from=inapp" target="_blank">POWERED BY MIXPANEL</a>' +
+	                                    '<a href="http://fap.com?from=inapp" target="_blank">POWERED BY MIXPANEL</a>' +
 	                                '</div>' +
 	                            '</div>' +
 	                            '<div id="button">' +
@@ -5072,10 +5076,10 @@
 	            var create_style_text = function(style_defs) {
 	                var st = '';
 	                for (var selector in style_defs) {
-	                    var mp_selector = selector
+	                    var fap_selector = selector
 	                            .replace(/#/g, '#' + MPNotif.MARKUP_PREFIX + '-')
 	                            .replace(/\./g, '.' + MPNotif.MARKUP_PREFIX + '-');
-	                    st += '\n' + mp_selector + ' {';
+	                    st += '\n' + fap_selector + ' {';
 	                    var props = style_defs[selector];
 	                    for (var k in props) {
 	                        st += k + ':' + props[k] + ';';
@@ -5485,7 +5489,7 @@
 	        mixpanel_master['_'] = _;
 	    };
 
-	    var override_mp_init_func = function() {
+	    var override_fap_init_func = function() {
 	        // we override the snippets init function to handle the case where a
 	        // user initializes the mixpanel library after the script loads & runs
 	        mixpanel_master['init'] = function(token, config, name) {
@@ -5578,17 +5582,17 @@
 	    var add_dom_event_counting_handlers = function(instance) {
 	        var name = instance.get_config('name');
 
-	        instance.mp_counts = instance.mp_counts || {};
-	        instance.mp_counts['$__c'] = parseInt(_.cookie.get('mp_' + name + '__c')) || 0;
+	        instance.fap_counts = instance.fap_counts || {};
+	        instance.fap_counts['$__c'] = parseInt(_.cookie.get('fap_' + name + '__c')) || 0;
 
 	        var increment_count = function() {
-	            instance.mp_counts['$__c'] = (instance.mp_counts['$__c'] || 0) + 1;
-	            _.cookie.set('mp_' + name + '__c', instance.mp_counts['$__c'], 1, true);
+	            instance.fap_counts['$__c'] = (instance.fap_counts['$__c'] || 0) + 1;
+	            _.cookie.set('fap_' + name + '__c', instance.fap_counts['$__c'], 1, true);
 	        };
 
 	        var evtCallback = function() {
 	            try {
-	                instance.mp_counts = instance.mp_counts || {};
+	                instance.fap_counts = instance.fap_counts || {};
 	                increment_count();
 	            } catch (e) {
 	                console$1.error(e);
@@ -5611,16 +5615,18 @@
 	        init_type = INIT_MODULE;
 	        mixpanel_master = new MixpanelLib();
 
-	        override_mp_init_func();
+	        override_fap_init_func();
 	        mixpanel_master['init']();
 	        add_dom_loaded_handler();
 
 	        return mixpanel_master;
 	    }
 
-	    var mixpanel = init_as_module();
+	    var fap = init_as_module();
 
-	    return mixpanel;
+	    var mixpanel$1 = mixpanel;
+
+	    return mixpanel$1;
 
 	}));
 
